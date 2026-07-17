@@ -1,0 +1,8 @@
+{
+  "config": {
+    "approved_prod_teams": ["platform-admins", "sre"],
+    "max_forks": 40,
+    "trusted_sources": ["github.com/ansible-collections", "galaxy.ansible.com", "hub.internal"],
+    "prod_inventories": ["prod", "prod-db", "prod-web"]
+  }
+}

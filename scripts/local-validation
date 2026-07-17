@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+test -f README.md
+test -f AGENTS.md
+test -f docs/implementation-plan.md
+test -f docs/docs-sources.md
+
+export GOFLAGS=-mod=mod GOTOOLCHAIN=local
+
+# Formatting must be clean.
+unformatted="$(gofmt -l cmd internal)"
+if [ -n "$unformatted" ]; then
+  echo "gofmt needed on:" >&2
+  echo "$unformatted" >&2
+  exit 1
+fi
+
+go vet ./...
+go test ./...
+
+printf 'local-validation=ok\n'
