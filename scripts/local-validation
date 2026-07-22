@@ -7,6 +7,8 @@ test -f AGENTS.md
 test -f docs/implementation-plan.md
 test -f docs/docs-sources.md
 
+bash scripts/validate-release-contract
+
 export GOFLAGS=-mod=mod GOTOOLCHAIN=local
 
 # Formatting must be clean.

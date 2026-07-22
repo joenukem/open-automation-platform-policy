@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+fail() {
+  printf 'FAIL: %s\n' "$*" >&2
+  exit 1
+}
+
+require_text() {
+  local file="$1"
+  local text="$2"
+  grep -Fq "$text" "$file" || fail "$file missing: $text"
+}
+
+for file in README.md AGENTS.md docs/implementation-plan.md docs/docs-sources.md; do
+  test -f "$file" || fail "missing required file: $file"
+done
+
+for text in \
+  "Full-Stack Release Contract" \
+  "open-automation-platform-deploy" \
+  "Helm, OLM, and standalone k3s VM" \
+  "awx-gateway" \
+  "/api/gateway/v1/me" \
+  "POST /v1/policy/decision" \
+  "/api/controller/v2/" \
+  "/api/hub/v1/" \
+  "/api/eda/v1/" \
+  "Controller, Hub, or EDA" \
+  "pre-launch enforcement" \
+  "MCP fail-closed" \
+  "gateway-full-stack-fixture-bootstrap" \
+  "gateway-full-stack-fixture-preflight" \
+  "gateway-full-stack-e2e" \
+  "gateway-console-shell-proof" \
+  "gateway-cross-surface-nav-proof" \
+  "gateway-hub-collection-sync-proof" \
+  "gateway-eda-rulebook-trigger-proof" \
+  "Required proof ordering is part of the release contract" \
+  "gateway-full-stack-e2e\` must precede \`gateway-console-shell-proof" \
+  "gateway-hub-collection-sync-proof\`," \
+  "controller_job=terminal\`" \
+  "no direct-origin leaks" \
+  "public/source-built" \
+  "digest-recorded" \
+  "credentials, OAuth tokens, kubeconfigs"
+do
+  require_text docs/implementation-plan.md "$text"
+done
+
+printf 'release-contract=ok\n'
